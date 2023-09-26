@@ -6,8 +6,8 @@ const express = require("express");
 const cors = require("cors"); //Para evitar restricciones entre sitio
 const usuario = express.Router();
 const cnn = require("./bdatos");
-const encrypt_data = require("./funciones");
 const nodemailer = require("nodemailer");
+const md5 = require("md5");
 //middlewares requeridos
 //middlewares: traductor de datos entre aplicaciones distribuidas
 usuario.use(express.json()); //serializa la data en json
@@ -30,7 +30,7 @@ usuario.get("/api/usuarios", (req, res) => {
 usuario.post("/api/usuarios", (req, res) => {
   let data = {
     email: req.body.email,
-    password: encrypt_data(req.body.password),
+    password: md5(req.body.password),
   };
   cnn.query("INSERT INTO usuario set ?", data, (error, respuesta) => {
     if (error) {
@@ -62,6 +62,31 @@ usuario.post("/api/usuarios", (req, res) => {
         }
       });
       res.status(201).send(respuesta);
+    }
+  });
+});
+
+usuario.post("/api/usuarioLogin", (req, res) => {
+  let data = {
+    email: req.body.email,
+    password: req.body.password,
+  };
+  cnn.query("select email, password from usuario where email='" + data.email + "'", (error, respuesta) => {
+    if (error) {
+      console.log("Error!");
+    } else {
+      if (respuesta.email === req.body.email && respuesta.password === md5(req.body.password)) {
+        res.status(201).send({
+          resultado: "OK",
+        });
+      } else {
+        res.status(201).send({
+          resultado: "Error en los datos",
+          email: req.body.email,
+          pass: md5(req.body.password),
+          pass2: respuesta,
+        });
+      }
     }
   });
 });
