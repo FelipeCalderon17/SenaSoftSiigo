@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/styles.css";
 import "../assets/css/index.css";
+import bg from "../assets/mp4/bg.mp4";
 
 const Login = ({ controlador, setControlador }) => {
   useEffect(() => {
@@ -15,7 +16,7 @@ const Login = ({ controlador, setControlador }) => {
         muted="muted"
         loop="loop"
       >
-        <source src="assets/mp4/bg.mp4" type="video/mp4" />
+        <source src={bg} type="video/mp4" />
       </video>
       <div className="masthead">
         <div className="masthead-content text-white">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import bg from "../assets/mp4/bg.mp4";
 
 const Registro = ({ controlador, setControlador }) => {
   console.log(controlador);
@@ -11,7 +12,7 @@ const Registro = ({ controlador, setControlador }) => {
         muted="muted"
         loop="loop"
       >
-        <source src="assets/mp4/bg.mp4" type="video/mp4" />
+        <source src={bg} type="video/mp4" />
       </video>
       <div className="masthead">
         <div className="masthead-content text-white">
