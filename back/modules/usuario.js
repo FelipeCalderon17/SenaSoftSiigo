@@ -6,8 +6,8 @@ const express = require("express");
 const cors = require("cors"); //Para evitar restricciones entre sitio
 const usuario = express.Router();
 const cnn = require("./bdatos");
-const funciones = require("./funciones");
 const encrypt_data = require("./funciones");
+const nodemailer = require("nodemailer");
 //middlewares requeridos
 //middlewares: traductor de datos entre aplicaciones distribuidas
 usuario.use(express.json()); //serializa la data en json
@@ -36,6 +36,31 @@ usuario.post("/api/usuarios", (req, res) => {
     if (error) {
       console.log("Error!");
     } else {
+      //Utilizo la librería nodemailer para hacer el envio del correo electronico
+      var smtpTransport = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: "calderonfelipe017@gmail.com",
+          pass: "etfwbubgtasjfbgy",
+        },
+      });
+
+      var mailOptions = {
+        from: "calderonfelipe017@gmail.com",
+        to: req.body.email,
+        subject: "Hello",
+        text: "Hello world",
+        html: "<b>Ya pude enviar correos </b>",
+      };
+
+      // send mail with defined transport object
+      smtpTransport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Message sent");
+        }
+      });
       res.status(201).send(respuesta);
     }
   });
