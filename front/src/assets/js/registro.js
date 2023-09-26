@@ -1,10 +1,6 @@
 const btnRegistrarse = document.querySelector("#btnRegistrarse");
-const urlApi = "http://localhost:4000/api/v1/usuario/insertar";
-const nombreRegistro = document.querySelector("#nombreRegistro");
-const apellidoRegistro = document.querySelector("#apellidoRegistro");
-const ciudadRegistro = document.querySelector("#ciudadRegistro");
-const direccionRegistro = document.querySelector("#direccionRegistro");
-const telefonoRegistro = document.querySelector("#telefonoRegistro");
+const urlApi = "http://localhost:5000/api/usuarios";
+const passRegistro = document.querySelector("#passRegistro");
 const emailRegistro = document.querySelector("#emailRegistro");
 
 btnRegistrarse.addEventListener("click", (e) => {
@@ -15,12 +11,8 @@ btnRegistrarse.addEventListener("click", (e) => {
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      nombre: nombreRegistro.value,
-      apellido: apellidoRegistro.value,
-      ciudad: ciudadRegistro.value,
-      direccion: direccionRegistro.value,
-      telefono: telefonoRegistro.value,
       email: emailRegistro.value,
+      password: passRegistro.value,
     }),
   })
     .then((response) => {
