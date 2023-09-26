@@ -37,14 +37,21 @@ const Registro = ({ controlador, setControlador }) => {
                   />
                 </div>
                 <div className="row justify-content-center mt-3">
+                  <div className="row">
+                    <a
+                      onClick={() => {
+                        setControlador(0);
+                        console.log(controlador);
+                      }}
+                      className="text-link btn text-white"
+                    >
+                      Ya tienes cuenta?
+                    </a>
+                  </div>
                   <button
-                    className="btn btn-success w-50"
+                    className="btn btn-success w-50 mt-2"
                     type="button"
                     id="btnRegistrarse"
-                    onClick={() => {
-                      setControlador(1);
-                      console.log(controlador);
-                    }}
                   >
                     Registrarse
                   </button>

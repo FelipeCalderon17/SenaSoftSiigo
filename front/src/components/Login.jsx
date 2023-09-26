@@ -20,7 +20,9 @@ const Login = ({ controlador, setControlador }) => {
       <div className="masthead">
         <div className="masthead-content text-white">
           <div className="container-fluid px-4 px-lg-0">
-            <h1 className="fst-italic lh-1 mb-4">Inicio de sesión</h1>
+            <h1 className="fst-italic lh-1 mb-4 text-center">
+              Inicio de sesión
+            </h1>
 
             <form id="contactForm">
               <div className="row input-group-newsletter">
@@ -40,9 +42,25 @@ const Login = ({ controlador, setControlador }) => {
                     aria-label="Ingrese su Contraseña..."
                   />
                 </div>
-                <div className="row justify-content-center mt-3">
+                <div className="row justify-content-center mt-3 text-center">
+                  <div className="row">
+                    <a className="text-link btn text-white">
+                      Olvidaste tu contraseña?
+                    </a>
+                  </div>
+                  <div className="row">
+                    <a
+                      onClick={() => {
+                        setControlador(1);
+                        console.log(controlador);
+                      }}
+                      className="btn text-white"
+                    >
+                      No tienes cuenta?
+                    </a>
+                  </div>
                   <button
-                    className="btn btn-success w-50"
+                    className="btn btn-success w-50 mt-2"
                     type="button"
                     id="btnLogin"
                   >
