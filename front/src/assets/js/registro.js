@@ -20,7 +20,7 @@ btnRegistrarse.addEventListener("click", (e) => {
     })
 
     .then((response) => {
-      if (response === "true") {
+      if (response.affectedRows === 1) {
         Swal.fire("Felicitaciones!", "Usuario registrado satisfactoriamente", "success");
         setTimeout(() => {
           window.location = "index.html";

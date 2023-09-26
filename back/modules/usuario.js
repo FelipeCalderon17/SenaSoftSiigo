@@ -75,7 +75,7 @@ usuario.post("/api/usuarioLogin", (req, res) => {
     if (error) {
       console.log("Error!");
     } else {
-      if (respuesta.email === req.body.email && respuesta.password === md5(req.body.password)) {
+      if (respuesta.password === md5(req.body.password) && req.body.email == respuesta.email) {
         res.status(201).send({
           resultado: "OK",
         });
