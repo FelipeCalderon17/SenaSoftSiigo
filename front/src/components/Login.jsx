@@ -62,7 +62,7 @@ const Login = ({ controlador, setControlador }) => {
                   </div>
                   <button
                     className="btn btn-success w-50 mt-2"
-                    type="button"
+                    type="submit"
                     id="btnLogin"
                   >
                     Iniciar sesion
