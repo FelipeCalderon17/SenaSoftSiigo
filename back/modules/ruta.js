@@ -9,7 +9,7 @@ const data = {
     { nombre: "A", posX: 20, posY: 20 },
     { nombre: "B", posX: 45, posY: 60 },
     { nombre: "C", posX: 79, posY: 90 },
-    { nombre: "D", posX: 56, posY: 79 },
+    { nombre: "D", posX: 56, posY: 79 }, //El algoritmo funciona pero no pasa por todos los nodos y debe de pasar
     { nombre: "E", posX: 57, posY: 69 },
     { nombre: "F", posX: 58, posY: 88 },
     { nombre: "G", posX: 59, posY: 89 },
