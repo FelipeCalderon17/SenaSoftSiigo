@@ -89,8 +89,6 @@ ruta.get("/api/crearRuta", (req, res) => {
   const rutaOptima = encontrarRutaOptima(data, destino);
 
   console.log("Ruta óptima:", rutaOptima);
-  arrayRutaOptima = rutaOptima.split(",");
-  arrayRutaOptima.forEach((nombre) => {});
   res.send({ "Ruta optima": rutaOptima });
 });
 
