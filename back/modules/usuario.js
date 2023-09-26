@@ -36,37 +36,31 @@ usuario.post("/api/usuarios", (req, res) => {
     if (error) {
       console.log("Error!");
     } else {
-      /* let jConfig = {
-        host: "localhost",
-        port: "456",
-        secure: false,
+      //Utilizo la librería nodemailer para hacer el envio del correo electronico
+      var smtpTransport = nodemailer.createTransport({
+        service: "Gmail",
         auth: {
-          type: "login",
-          user: req.body.email,
-          pass: req.body.password,
+          user: "calderonfelipe017@gmail.com",
+          pass: "etfwbubgtasjfbgy",
         },
+      });
+
+      var mailOptions = {
+        from: "calderonfelipe017@gmail.com",
+        to: req.body.email,
+        subject: "Hello",
+        text: "Hello world",
+        html: "<b>Ya pude enviar correos </b>",
       };
-      let email = {
-        from: "senasoft2023@gmail.com", //remitente
-        to: req.body.email, //destinatario
-        subject: "Nuevo mensaje de usuario", //asunto del correo
-        html: ` 
-            <div> 
-            <p>Hola amigo</p> 
-            <p>Esto es una prueba del vídeo</p> 
-            <p>¿Cómo enviar correos eletrónicos con Nodemailer en NodeJS </p> 
-            </div> 
-        `,
-      };
-      let createTransport = nodemailer.createTransport(jConfig);
-      createTransport.sendMail(email, function (error, info) {
+
+      // send mail with defined transport object
+      smtpTransport.sendMail(mailOptions, function (error, response) {
         if (error) {
-          console.log("Error al enviar email" + error.message);
+          console.log(error);
         } else {
-          console.log("Correo enviado correctamente");
+          console.log("Message sent");
         }
-        createTransport.close();
-      }); */
+      });
       res.status(201).send(respuesta);
     }
   });
