@@ -85,7 +85,7 @@ usuario.post("/api/usuarioLogin", (req, res) => {
     if (error) {
       console.log("Error!2");
     } else {
-      if (bcrypt.compare(data.password, respuesta[0].password) && req.body.email == respuesta[0].email) {
+      if (bcrypt.hashSync(data.password) == respuesta[0].password && req.body.email == respuesta[0].email) {
         cnn.query("update usuario set sesion_activa=1"),
           (error, respuesta) => {
             if (error) {
@@ -93,6 +93,7 @@ usuario.post("/api/usuarioLogin", (req, res) => {
             }
           };
         res.send({
+          c: bcrypt.hashSync(data.password),
           resultado: "OK",
         });
       } else {
@@ -139,7 +140,10 @@ usuario.get("/api/usuarios/confirm/:token", (req, res) => {
       if (error) {
         console.log(error.message);
       } else {
-        return res.send(response);
+        return res.json({
+          respuesta: response,
+          validado: true,
+        });
       }
     });
 
