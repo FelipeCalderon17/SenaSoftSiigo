@@ -9,73 +9,65 @@ ruta.use(express.json()); //serializa la data en json
 ruta.use(cors()); //permite acceso de otras direcciones IP distintas a mi servicio
 ruta.options("*", cors()); //Configura las ip admitidas por cors, * == todas
 //Funcion para crear la ruta
-function findShortestTSPRoute(jsonData) {
+function encontrarRutaMasEficiente(jsonData) {
   const { ubicaciones, conexiones, inicio } = jsonData;
-  const locations = new Map();
-  const graph = {};
 
-  // Construir el grafo a partir de los datos JSON
-  ubicaciones.forEach((ubicacion) => {
-    const { nombre, posX, posY } = ubicacion;
-
-    locations.set(nombre, { posX, posY });
-
-    if (!graph[nombre]) {
-      graph[nombre] = {};
-    }
-  });
-
+  // Crear un grafo a partir de las conexiones
+  const grafo = {};
   conexiones.forEach((conexion) => {
     const { ubicacion1, ubicacion2, peso } = conexion;
-
-    graph[ubicacion1][ubicacion2] = peso;
-    graph[ubicacion2][ubicacion1] = peso;
+    if (!grafo[ubicacion1]) {
+      grafo[ubicacion1] = {};
+    }
+    if (!grafo[ubicacion2]) {
+      grafo[ubicacion2] = {};
+    }
+    grafo[ubicacion1][ubicacion2] = peso;
+    grafo[ubicacion2][ubicacion1] = peso;
   });
 
-  // Función para encontrar el nodo no visitado más cercano
-  function findNearestUnvisitedNode(currentLocation, unvisitedLocations) {
-    let nearestNeighbor = null;
-    let minDistance = Infinity;
+  // Encontrar todos los nodos conectados
+  const nodosConectados = new Set();
+  nodosConectados.add(inicio);
 
-    for (const location of unvisitedLocations) {
-      if (graph[currentLocation][location] < minDistance) {
-        nearestNeighbor = location;
-        minDistance = graph[currentLocation][location];
+  const rutaActual = [];
+
+  function encontrarRutaActual(nodoActual, visitados) {
+    visitados.add(nodoActual);
+    const ubicacion = ubicaciones.find((ubicacion) => ubicacion.nombre === nodoActual);
+    if (ubicacion) {
+      rutaActual.push({ nombre: nodoActual, posX: ubicacion.posX, posY: ubicacion.posY });
+    }
+
+    // Buscar el nodo no visitado más cercano
+    for (const vecino in grafo[nodoActual]) {
+      if (!visitados.has(vecino)) {
+        encontrarRutaActual(vecino, visitados);
       }
     }
-
-    return nearestNeighbor;
   }
 
-  const visitedLocations = new Set();
-  let currentLocation = inicio;
-  visitedLocations.add(currentLocation);
-  const path = [{ nombre: currentLocation, ...locations.get(currentLocation) }];
+  encontrarRutaActual(inicio, nodosConectados);
 
-  while (visitedLocations.size < locations.size) {
-    const unvisitedLocations = new Set([...locations.keys()].filter((loc) => !visitedLocations.has(loc)));
-    const nearestNeighbor = findNearestUnvisitedNode(currentLocation, unvisitedLocations);
+  // Encontrar nodos sin conexión
+  const nodosSinConexion = ubicaciones
+    .filter((ubicacion) => ubicacion.nombre !== inicio && !nodosConectados.has(ubicacion.nombre))
+    .map((ubicacion) => ({ nombre: ubicacion.nombre, posX: ubicacion.posX, posY: ubicacion.posY }));
 
-    if (nearestNeighbor) {
-      path.push({ nombre: nearestNeighbor, ...locations.get(nearestNeighbor) });
-      visitedLocations.add(nearestNeighbor);
-      currentLocation = nearestNeighbor;
-    } else {
-      // Si no se encuentra un vecino no visitado, regresar al inicio
-      const unvisitedLocationArray = [...unvisitedLocations];
-      currentLocation = unvisitedLocationArray[0];
-      path.push({ nombre: currentLocation, ...locations.get(currentLocation) });
-      visitedLocations.add(currentLocation);
-    }
-  }
-
-  return { ruta: path };
+  return {
+    rutaMasEficiente: rutaActual,
+    nodosSinConexion: nodosSinConexion,
+  };
 }
+
 //Verbo POST PARA CREAR LA RUTA
 ruta.post("/api/crearRuta", (req, res) => {
   const jsonData = req.body;
-  const tspRoute = findShortestTSPRoute(jsonData);
-  return res.send(JSON.stringify(tspRoute, null, 2));
+  const resultado = encontrarRutaMasEficiente(jsonData);
+  return res.send({
+    Ruta: resultado.rutaMasEficiente.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(" -> "),
+    "Nodos sin conexion": resultado.nodosSinConexion.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(", "),
+  });
 });
 
 module.exports = ruta;
