@@ -8,7 +8,7 @@ import "https://cdn.jsdelivr.net/npm/sweetalert2@11";
 import Navbar from "./Navbar";
 import SubirJson from "./SubirJson";
 import EscribirJson from "./EscribirJson";
-import Mapa from "./Mapa";
+import AgregarNodo from "./AgregarNodo";
 
 //importacion de la libreria chart.js
 
@@ -24,7 +24,7 @@ import { Scatter } from "react-chartjs-2";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-const datos = {
+const data = {
   labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
   datasets: [
     {
@@ -55,6 +55,8 @@ const IndexBase = () => {
   const [navbarControlador, setNavbarControlador] = useState(0);
   //0 = Agregar Destino  1 = Subir archivo  2 = Escribir archivo
 
+  //Creamos la variable para almacenar en la base de datos
+  const [datos, setDatos] = useState([]);
   useEffect(() => {}, []);
   return (
     <>
@@ -78,117 +80,20 @@ const IndexBase = () => {
                   return <EscribirJson></EscribirJson>;
                 } else {
                   return (
-                    <>
-                      <button
-                        className="btn btn-dark sticky-top "
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasExample"
-                        aria-controls="offcanvasExample"
-                      >
-                        {" "}
-                        Agregar Destino
-                      </button>
-                      {
-                        //Inicio del offcanvas para agregar destino
-                      }
-                      <div
-                        className="offcanvas offcanvas-end"
-                        tabindex="-1"
-                        id="offcanvasExample"
-                        aria-labelledby="offcanvasExampleLabel"
-                      >
-                        <div className="offcanvas-header">
-                          <h5
-                            className="offcanvas-title"
-                            id="offcanvasExampleLabel"
-                          >
-                            AGREGAR DESTINO
-                          </h5>
-                          <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close"
-                          ></button>
-                        </div>
-                        <div className="offcanvas-body">
-                          <form action="">
-                            <div>
-                              <div className="row mb-3">
-                                <div className="col-12">
-                                  <h5>Nombre: </h5>
-                                  <input
-                                    type="text"
-                                    placeholder="Ingrese el nombre del destino"
-                                    className="form-control"
-                                  />
-                                </div>
-                              </div>
-                              <div className="row mb-3">
-                                <div className="col-12">
-                                  <h5>Posicion X: </h5>
-                                  <input
-                                    type="text"
-                                    placeholder="Ingrese la posicion X del destino"
-                                    className="form-control"
-                                  />
-                                </div>
-                              </div>
-                              <div className="row mb-3">
-                                <div className="col-12">
-                                  <h5>Posicion Y: </h5>
-                                  <input
-                                    type="text"
-                                    placeholder="Ingrese la posicion Y del destino"
-                                    className="form-control"
-                                  />
-                                </div>
-                              </div>
-                              <div className="row mb-3">
-                                <div className="col-12">
-                                  <h5>Peso: </h5>
-                                  <input
-                                    type="text"
-                                    placeholder="Ingrese el peso "
-                                    className="form-control"
-                                  />
-                                </div>
-                              </div>
-                              <div className="row mb-5">
-                                <div className="col-12">
-                                  <h5>Conexion: </h5>
-                                  <select className="form-select" name="" id="">
-                                    <option value="">dsadas</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="row ">
-                                <div className="col-12 text-center">
-                                  <input
-                                    type="submit"
-                                    className="btn btn-primary w-50"
-                                    value={"Enviar"}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                      {
-                        //Fin del offcanvas para agregar destino
-                      }
-                    </>
+                    <AgregarNodo
+                      datos={datos}
+                      setDatos={setDatos}
+                    ></AgregarNodo>
                   );
                 }
               }
             })()}
           </div>
-        </div>
-        <div className="row bg-white sticky-top mx-0 my-0">
-          <h1 className="text-center mt-3">RUTAS</h1>
-          <div className="col-10 m-auto d-flex justify-content-center  pb-4">
-            <Scatter data={datos}></Scatter>
+          <div className="row bg-white mt-5  mx-0 my-0">
+            <h1 className="text-center mt-3">RUTAS</h1>
+            <div className="col-10 m-auto d-flex justify-content-center   pb-4">
+              <Scatter data={data}></Scatter>
+            </div>
           </div>
         </div>
       </div>
