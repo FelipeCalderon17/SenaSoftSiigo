@@ -45,17 +45,17 @@ usuario.post("/api/usuarios", (req, res) => {
       var smtpTransport = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-          user: "calderonfelipe017@gmail.com",
-          pass: "etfwbubgtasjfbgy",
+          user: "rutasoft2023@gmail.com",
+          pass: "uddsoxkoztpnfmxe",
         },
       });
 
       var mailOptions = {
-        from: "calderonfelipe017@gmail.com",
+        from: "rutasoft2023@gmail.com",
         to: req.body.email,
-        subject: "Email de prueba",
+        subject: "Bienvenido al sistema RutaSoft",
         html: `<div>"
-  <h2>Hola ${data.email}</h2>
+  <h2>Hola ${data.email} Bienvendido al software de RutaSoft</h2>
   <p>Para confirmar tu cuenta haz click en el siguiente enlace</p>
   <a href="http://localhost:5000/api/usuarios/confirm/${getToken(data)}">Confirmar Cuenta</a>
   </div>`,
