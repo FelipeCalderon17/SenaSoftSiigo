@@ -9,6 +9,7 @@ const cnn = require("./bdatos");
 const nodemailer = require("nodemailer");
 const { v4: uuidv4 } = require("uuid");
 const { getToken, getTokenData } = require("../helpers/jwt");
+const bcrypt = require("bcryptjs");
 //middlewares requeridos
 //middlewares: traductor de datos entre aplicaciones distribuidas
 usuario.use(express.json()); //serializa la data en json
@@ -31,7 +32,7 @@ usuario.post("/api/usuarios", (req, res) => {
   const code = uuidv4();
   const data = {
     email: req.body.email,
-    password: req.body.password,
+    password: bcrypt.hashSync(req.body.password, 7),
     codigo: code,
     verificado: false,
     sesion_activa: false,
@@ -84,16 +85,19 @@ usuario.post("/api/usuarioLogin", (req, res) => {
     if (error) {
       console.log("Error!2");
     } else {
-      if (respuesta.password === req.body.password && req.body.email == respuesta.email) {
-        res.status(201).send({
+      if (bcrypt.compare(data.password, respuesta[0].password) && req.body.email == respuesta[0].email) {
+        cnn.query("update usuario set sesion_activa=1"),
+          (error, respuesta) => {
+            if (error) {
+              console.log("Error!" + error.message);
+            }
+          };
+        res.send({
           resultado: "OK",
         });
       } else {
         res.status(201).send({
           resultado: "Error en los datos",
-          email: req.body.email,
-          pass: req.body.password,
-          pass2: respuesta,
         });
       }
     }
@@ -161,7 +165,6 @@ usuario.post("/api/buscarCorreo", (req, res) => {
   });
 });
 //Hago la ruta para verificar si la sesion esta iniciada
-//TODO revisar los json de sesion y login porque no estan sirviendo los parametros
 usuario.post("/api/sesion", (req, res) => {
   let data = {
     email: req.body.email,
@@ -171,12 +174,12 @@ usuario.post("/api/sesion", (req, res) => {
       console.log("Error!2");
     } else {
       res.send(respuesta);
-      if (respuesta.sesion_activa == 1) {
-        return res.send(respuesta.sesion_activa + "1");
+      if (respuesta[0].sesion_activa == 1) {
+        return res.send("True");
       } else {
-        res.send(respuesta.sesion_activa + "0");
+        res.send(respuesta[0].sesion_activa + "0");
       }
-      res.status(201).send({ res: respuesta });
+      res.status(201).send("False");
     }
   });
 });
