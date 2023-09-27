@@ -3,7 +3,12 @@ import "../assets/css/styles.css";
 import "../assets/css/index.css";
 import bg from "../assets/mp4/bg.mp4";
 
-const Login = ({ controlador, setControlador }) => {
+const Login = ({
+  controlador,
+  setControlador,
+  LoginControlador,
+  setLoginControlador,
+}) => {
   useEffect(() => {
     console.log(controlador);
   }, []);
@@ -45,11 +50,6 @@ const Login = ({ controlador, setControlador }) => {
                 </div>
                 <div className="row justify-content-center mt-3 text-center">
                   <div className="row">
-                    <a className="text-link btn text-white">
-                      Olvidaste tu contraseña?
-                    </a>
-                  </div>
-                  <div className="row">
                     <a
                       onClick={() => {
                         setControlador(1);
@@ -62,8 +62,11 @@ const Login = ({ controlador, setControlador }) => {
                   </div>
                   <button
                     className="btn btn-success w-50 mt-2"
-                    type="subsit"
+                    type="submit"
                     id="btnLogin"
+                    onClick={() => {
+                      setLoginControlador(1);
+                    }}
                   >
                     Iniciar sesion
                   </button>
