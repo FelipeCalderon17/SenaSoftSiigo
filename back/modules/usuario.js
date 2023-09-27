@@ -34,6 +34,7 @@ usuario.post("/api/usuarios", (req, res) => {
     password: req.body.password,
     codigo: code,
     verificado: false,
+    sesion_activa: false,
   };
   cnn.query("INSERT INTO usuario set ?", data, (error, respuesta) => {
     if (error) {
@@ -73,7 +74,7 @@ usuario.post("/api/usuarios", (req, res) => {
     }
   });
 });
-
+//Ruta para hacer el login
 usuario.post("/api/usuarioLogin", (req, res) => {
   let data = {
     email: req.body.email,
@@ -129,14 +130,6 @@ usuario.get("/api/usuarios/confirm/:token", (req, res) => {
         }
       }
     });
-    //verificar el codigo
-    /* if(codigo != codedb){
-      return res.send("Error! 3"+ codigo + "   "+ codedb)
-    }else{
-      return res.json({
-        melo:"melo caramelo"
-      })
-    } */
     //actualizar usuario
     cnn.query("update usuario set verificado=true where email='" + email + "'", (error, response) => {
       if (error) {
@@ -153,5 +146,38 @@ usuario.get("/api/usuarios/confirm/:token", (req, res) => {
   } catch (error) {
     console.log("Error!4" + error.message);
   }
+});
+//Hago la ruta para buscar si el email ya esta registrado en el sistema
+usuario.post("/api/buscarCorreo", (req, res) => {
+  let data = {
+    email: req.body.email,
+  };
+  cnn.query("select email from usuario where email='" + data.email + "'", (error, respuesta) => {
+    if (error) {
+      console.log("Error!2");
+    } else {
+      res.status(201).send({ res: respuesta });
+    }
+  });
+});
+//Hago la ruta para verificar si la sesion esta iniciada
+//TODO revisar los json de sesion y login porque no estan sirviendo los parametros
+usuario.post("/api/sesion", (req, res) => {
+  let data = {
+    email: req.body.email,
+  };
+  cnn.query("select sesion_activa from usuario where email='" + data.email + "'", (error, respuesta) => {
+    if (error) {
+      console.log("Error!2");
+    } else {
+      res.send(respuesta);
+      if (respuesta.sesion_activa == 1) {
+        return res.send(respuesta.sesion_activa + "1");
+      } else {
+        res.send(respuesta.sesion_activa + "0");
+      }
+      res.status(201).send({ res: respuesta });
+    }
+  });
 });
 module.exports = usuario;
