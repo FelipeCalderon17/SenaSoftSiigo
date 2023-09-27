@@ -1,0 +1,57 @@
+{
+  "ubicaciones": [
+    {
+      "nombre": "Bogota",
+      "posX": 3,
+      "posY": 11
+    },
+    {
+      "nombre": "Medellin",
+      "posX": 2,
+      "posY": 2
+    },
+    {
+      "nombre": "Cali",
+      "posX": 8,
+      "posY": 6
+    },
+    {
+      "nombre": "Cartagena",
+      "posX": 11,
+      "posY": 1
+    },
+    {
+      "nombre": "Barranquilla",
+      "posX": 16,
+      "posY": 5
+    }
+  ],
+  "conexiones": [
+    {
+      "ubicacion1": "Bogota",
+      "ubicacion2": "Medellin",
+      "peso": 420
+    },
+    {
+      "ubicacion1": "Bogota",
+      "ubicacion2": "Cali",
+      "peso": 300
+    },
+    {
+      "ubicacion1": "Medellin",
+      "ubicacion2": "Cali",
+      "peso": 315
+    },
+    {
+      "ubicacion1": "Medellin",
+      "ubicacion2": "Cartagena",
+      "peso": 510
+    },
+    {
+      "ubicacion1": "Cartagena",
+      "ubicacion2": "Barranquilla",
+      "peso": 130
+    }
+  ],
+  "inicio": "Barranquilla"
+}

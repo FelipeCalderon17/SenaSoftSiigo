@@ -28,7 +28,7 @@ const datos = {
   labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
   datasets: [
     {
-      label: "First dataset",
+      label: "Nodos",
       /*  data: [33, 53, 85, 41, 44, 65], */
       data: [
         { x: 4, y: 62 },
@@ -36,9 +36,10 @@ const datos = {
         { x: 13, y: 46 },
         { x: 17, y: 2 },
       ],
-
+      responsive: true,
       backgroundColor: "rgba(75,192,192,0.2)",
       borderColor: "rgba(75,192,192,1)",
+      showLine: true,
     },
     /*   {
           label: "Second dataset",
@@ -79,7 +80,7 @@ const IndexBase = () => {
                   return (
                     <>
                       <button
-                        className="btn btn-dark"
+                        className="btn btn-dark sticky-top "
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasExample"
                         aria-controls="offcanvasExample"
@@ -186,7 +187,7 @@ const IndexBase = () => {
         </div>
         <div className="row bg-white sticky-top mx-0 my-0">
           <h1 className="text-center mt-3">RUTAS</h1>
-          <div className="col-8 m-auto d-flex justify-content-center  pb-4">
+          <div className="col-10 m-auto d-flex justify-content-center  pb-4">
             <Scatter data={datos}></Scatter>
           </div>
         </div>
