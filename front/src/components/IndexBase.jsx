@@ -57,6 +57,14 @@ const IndexBase = () => {
 
   //Creamos la variable para almacenar en la base de datos
   const [datos, setDatos] = useState([]);
+  const [nodosTabla, setNodosTabla] = useState([]);
+
+  const leerLS = () => {
+    let nodos = JSON.parse(localStorage.getItem("nodos"));
+    setDatos(nodos);
+    return nodos;
+  };
+
   useEffect(() => {}, []);
   return (
     <>
@@ -77,7 +85,12 @@ const IndexBase = () => {
                 return <SubirJson></SubirJson>;
               } else {
                 if (navbarControlador == 2) {
-                  return <EscribirJson></EscribirJson>;
+                  return (
+                    <EscribirJson
+                      nodosTabla={nodosTabla}
+                      setNodosTabla={setNodosTabla}
+                    ></EscribirJson>
+                  );
                 } else {
                   return (
                     <AgregarNodo
@@ -90,6 +103,14 @@ const IndexBase = () => {
             })()}
           </div>
           <div className="row bg-white mt-5  mx-0 my-0">
+            <button
+              onClick={() => {
+                console.log(nodosTabla);
+              }}
+            >
+              {" "}
+              dsds
+            </button>
             <h1 className="text-center mt-3">RUTAS</h1>
             <div className="col-10 m-auto d-flex justify-content-center   pb-4">
               <Scatter data={data}></Scatter>

@@ -25,7 +25,6 @@ const AgregarNodo = ({ datos, setDatos }) => {
   // Metodo que obtiene la data del form, crea un objeto y setea el estado del componente
   const getDatosFrm = (e) => {
     e.preventDefault(); // para evitar la recarga automatica del form
-    e.remove();
     let nombreNodo = e.target.nombreNodo;
     let posx = e.target.posx;
     let posy = e.target.posy;
@@ -39,8 +38,8 @@ const AgregarNodo = ({ datos, setDatos }) => {
       pesoNodo: pesoNodo.value,
       conexionNodo: conexionNodo.value,
     };
-    //setDatos(valoresFrm);
-    //salvarLocal(valoresFrm);
+    setDatos(valoresFrm);
+    salvarLocal(valoresFrm);
   };
 
   return (

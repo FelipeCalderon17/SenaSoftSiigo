@@ -1,6 +1,35 @@
 import React, { useState, useEffect } from "react";
 
-const EscribirJson = () => {
+const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
+  const enviarJson = (e) => {
+    e.preventDefault();
+    let json = e.target.data.value;
+    fetch("http://localhost:5000/api/crearRuta", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        jsonData: json,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+
+      .then((response) => {
+        if (response.resultado == true) {
+          setNodosTabla(response.Ruta);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error en la insercion",
+          });
+        }
+      });
+  };
+
   return (
     <>
       <form action="" className="d-flex">
@@ -13,6 +42,8 @@ const EscribirJson = () => {
               <textarea
                 style={{ resize: "none" }}
                 rows="5"
+                id="data"
+                name="data"
                 className="form-control border-0 w-100"
                 placeholder="Escribir JSON"
               ></textarea>
