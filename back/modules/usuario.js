@@ -173,13 +173,11 @@ usuario.post("/api/sesion", (req, res) => {
     if (error) {
       console.log("Error!2");
     } else {
-      res.send(respuesta);
       if (respuesta[0].sesion_activa == 1) {
         return res.send("True");
       } else {
-        res.send(respuesta[0].sesion_activa + "0");
+        return res.send("False");
       }
-      res.status(201).send("False");
     }
   });
 });
