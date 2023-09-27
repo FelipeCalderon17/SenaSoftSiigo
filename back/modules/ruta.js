@@ -8,6 +8,7 @@ const ruta = express.Router();
 ruta.use(express.json()); //serializa la data en json
 ruta.use(cors()); //permite acceso de otras direcciones IP distintas a mi servicio
 ruta.options("*", cors()); //Configura las ip admitidas por cors, * == todas
+const cnn = require("./bdatos");
 //Funcion para crear la ruta
 function encontrarRutaMasEficiente(jsonData) {
   const { ubicaciones, conexiones, inicio } = jsonData;
@@ -64,9 +65,42 @@ function encontrarRutaMasEficiente(jsonData) {
 ruta.post("/api/crearRuta", (req, res) => {
   const jsonData = req.body;
   const resultado = encontrarRutaMasEficiente(jsonData);
-  return res.send({
-    Ruta: resultado.rutaMasEficiente.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(" -> "),
-    "Nodos sin conexion": resultado.nodosSinConexion.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(", "),
+  let dataInsertar = {
+    nodo_inicio: resultado.rutaMasEficiente[0].nombre,
+    nodo_fin: resultado.rutaMasEficiente[resultado.rutaMasEficiente.length - 1].nombre,
+    nodo_inicio_x: resultado.rutaMasEficiente[0].posX,
+    nodo_inicio_y: resultado.rutaMasEficiente[0].posY,
+    nodo_fin_x: resultado.rutaMasEficiente[resultado.rutaMasEficiente.length - 1].posX,
+    nodo_fin_y: resultado.rutaMasEficiente[resultado.rutaMasEficiente.length - 1].posY,
+  };
+  cnn.query("insert into ruta set ?", dataInsertar, (error, respuesta) => {
+    if (error) {
+      console.log("error" + error.message);
+    } else {
+      cnn.query("select max(idRuta) as idRuta from ruta", (error, respuesta) => {
+        if (error) {
+          console.log("error" + error.message);
+        }
+        let idRuta = respuesta[0].idRuta;
+        for (let i = 0; i < resultado.rutaMasEficiente.length; i++) {
+          let dataInsert = {
+            nodo_nombre: resultado.rutaMasEficiente[i].nombre,
+            nodo_posicion_x: resultado.rutaMasEficiente[i].posX,
+            nodo_posicion_y: resultado.rutaMasEficiente[i].posY,
+            Ruta_idRuta: idRuta,
+          };
+          cnn.query("insert into ruta_completa set ?", dataInsert, (error, respuesta) => {
+            if (error) {
+              console.log("error" + error.message);
+            }
+          });
+        }
+      });
+      return res.send({
+        Ruta: resultado.rutaMasEficiente.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(" -> "),
+        Nodos_sin_conexion: resultado.nodosSinConexion.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(", "),
+      });
+    }
   });
 });
 

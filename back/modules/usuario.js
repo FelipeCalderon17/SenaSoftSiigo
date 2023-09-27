@@ -45,17 +45,17 @@ usuario.post("/api/usuarios", (req, res) => {
       var smtpTransport = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-          user: "calderonfelipe017@gmail.com",
-          pass: "etfwbubgtasjfbgy",
+          user: "rutasoft2023@gmail.com",
+          pass: "uddsoxkoztpnfmxe",
         },
       });
 
       var mailOptions = {
-        from: "calderonfelipe017@gmail.com",
+        from: "rutasoft2023@gmail.com",
         to: req.body.email,
-        subject: "Email de prueba",
+        subject: "Bienvenido al sistema RutaSoft",
         html: `<div>"
-  <h2>Hola ${data.email}</h2>
+  <h2>Hola ${data.email} Bienvendido al software de RutaSoft</h2>
   <p>Para confirmar tu cuenta haz click en el siguiente enlace</p>
   <a href="http://localhost:5000/api/usuarios/confirm/${getToken(data)}">Confirmar Cuenta</a>
   </div>`,
@@ -173,13 +173,47 @@ usuario.post("/api/sesion", (req, res) => {
     if (error) {
       console.log("Error!2");
     } else {
-      res.send(respuesta);
       if (respuesta[0].sesion_activa == 1) {
         return res.send("True");
       } else {
-        res.send(respuesta[0].sesion_activa + "0");
+        return res.send("False");
       }
-      res.status(201).send("False");
+    }
+  });
+});
+//Hago el metodo para dejar la funcion inactiva
+usuario.post("/api/cerrarSesion", (req, res) => {
+  let data = {
+    email: req.body.email,
+  };
+  cnn.query("update usuario set sesion_activa = 0 where email='" + data.email + "'", (error, respuesta) => {
+    if (error) {
+      console.log("Error!2");
+    } else {
+      res.send({
+        sesion_activa: false,
+      });
+    }
+  });
+});
+//
+usuario.post("/api/validarVerificacion", (req, res) => {
+  let data = {
+    email: req.body.email,
+  };
+  cnn.query("select verificado from usuario where email='" + data.email + "'", (error, respuesta) => {
+    if (error) {
+      console.log("Error!2");
+    } else {
+      if (respuesta[0].verificado == 1) {
+        res.send({
+          verificado: true,
+        });
+      } else {
+        res.send({
+          verificado: false,
+        });
+      }
     }
   });
 });
