@@ -181,4 +181,18 @@ usuario.post("/api/sesion", (req, res) => {
     }
   });
 });
+usuario.post("/api/cerrarSesion", (req, res) => {
+  let data = {
+    email: req.body.email,
+  };
+  cnn.query("update usuario set sesion_activa = 0", (error, respuesta) => {
+    if (error) {
+      console.log("Error!2");
+    } else {
+      res.send({
+        sesion_activa: false,
+      });
+    }
+  });
+});
 module.exports = usuario;
