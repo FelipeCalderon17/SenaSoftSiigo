@@ -181,17 +181,39 @@ usuario.post("/api/sesion", (req, res) => {
     }
   });
 });
+//Hago el metodo para dejar la funcion inactiva
 usuario.post("/api/cerrarSesion", (req, res) => {
   let data = {
     email: req.body.email,
   };
-  cnn.query("update usuario set sesion_activa = 0", (error, respuesta) => {
+  cnn.query("update usuario set sesion_activa = 0 where email='" + data.email + "'", (error, respuesta) => {
     if (error) {
       console.log("Error!2");
     } else {
       res.send({
         sesion_activa: false,
       });
+    }
+  });
+});
+//
+usuario.post("/api/validarVerificacion", (req, res) => {
+  let data = {
+    email: req.body.email,
+  };
+  cnn.query("select verificado from usuario where email='" + data.email + "'", (error, respuesta) => {
+    if (error) {
+      console.log("Error!2");
+    } else {
+      if (respuesta[0].verificado == 1) {
+        res.send({
+          verificado: true,
+        });
+      } else {
+        res.send({
+          verificado: false,
+        });
+      }
     }
   });
 });
