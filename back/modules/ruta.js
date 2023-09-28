@@ -120,4 +120,15 @@ ruta.post("/api/crearRuta", async (req, res) => {
   }
 });
 
+//Verbo GET Para traer la ruta
+ruta.post("/api/traerRuta", (req, res) => {
+  let Ruta_idRuta = req.body.idRuta;
+  cnn.query("SELECT nodo_nombre FROM ruta_completa where Ruta_idRuta=" + Ruta_idRuta, (error, response) => {
+    if (error) {
+      console.log(error.message);
+    } else {
+      res.send(response);
+    }
+  });
+});
 module.exports = ruta;

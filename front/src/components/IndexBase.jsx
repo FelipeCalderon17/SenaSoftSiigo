@@ -11,14 +11,7 @@ import EscribirJson from "./EscribirJson";
 import AgregarNodo from "./AgregarNodo";
 //importacion de la libreria chart.js
 
-import {
-  Chart as ChartJS,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
 import { Scatter } from "react-chartjs-2";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
@@ -104,20 +97,15 @@ const IndexBase = () => {
   return (
     <>
       <div classNameName="container-fluid bg-white p-0">
-        <Navbar
-          navbarControlador={navbarControlador}
-          setNavbarControlador={setNavbarControlador}
-        ></Navbar>
-        <div
-          className="container-fluid bg-primary sticky-top"
-          data-wow-delay="0.1s"
-          style={{ padding: "35px" }}
-        >
+        <Navbar navbarControlador={navbarControlador} setNavbarControlador={setNavbarControlador}></Navbar>
+        <div className="container-fluid bg-primary sticky-top" data-wow-delay="0.1s" style={{ padding: "35px" }}>
           <div className="container">
             {(() => {
               //Desicion para controlar el contenido del div de interacciones
               if (navbarControlador == 1) {
-                return <SubirJson></SubirJson>;
+                return (
+                  <SubirJson nodosTabla={nodosTabla} setNodosTabla={setNodosTabla} nodosData={nodosData} setNodosData={setNodosData}></SubirJson>
+                );
               } else {
                 if (navbarControlador == 2) {
                   return (
@@ -133,8 +121,6 @@ const IndexBase = () => {
                     <AgregarNodo
                       datos={datos}
                       setDatos={setDatos}
-                      envio={envio}
-                      setEnvio={setEnvio}
                     ></AgregarNodo>
                   );
                 }
