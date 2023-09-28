@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-const AgregarNodo = ({ datos, setDatos }) => {
+const AgregarNodo = ({ datos, setDatos, envio,setEnvio }) => {
   //Metodo que almacenara los nodos en el localstorage
+  const leerLS = () => {
+    let nodos = JSON.parse(localStorage.getItem("nodos"));
+    setDatos(nodos);
 
+  }
   const salvarLocal = (valoresFrm) => {
     //leemos la informacion del localstorage
     let elementos = JSON.parse(localStorage.getItem("nodos"));
@@ -20,6 +24,7 @@ const AgregarNodo = ({ datos, setDatos }) => {
       showConfirmButton: false,
       timer: 1500,
     });
+    setEnvio(1);
   };
 
   // Metodo que obtiene la data del form, crea un objeto y setea el estado del componente
@@ -42,6 +47,9 @@ const AgregarNodo = ({ datos, setDatos }) => {
     salvarLocal(valoresFrm);
   };
 
+  useEffect(() => {
+    
+  }, []);
   return (
     <>
       <button className="btn btn-dark sticky-top " data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
@@ -63,7 +71,6 @@ const AgregarNodo = ({ datos, setDatos }) => {
             <div>
               <div className="row mb-3">
                 <div className="col-12">
-                  <button onClick={(e) => {}}>ds</button>
                   <h5>Nombre: </h5>
                   <input type="text" placeholder="Ingrese el nombre del destino" name="nombreNodo" id="nombreNodo" className="form-control" />
                 </div>

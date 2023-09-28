@@ -9,7 +9,6 @@ import Navbar from "./Navbar";
 import SubirJson from "./SubirJson";
 import EscribirJson from "./EscribirJson";
 import AgregarNodo from "./AgregarNodo";
-
 //importacion de la libreria chart.js
 
 import {
@@ -25,6 +24,13 @@ import { Scatter } from "react-chartjs-2";
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 const IndexBase = () => {
+  const leerLS = () => {
+    let nodos = JSON.parse(localStorage.getItem("nodos"));
+    setDatos(nodos);
+    console.log(nodos);
+    return nodos;
+  };
+
   let date = {
     labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
     datasets: [
@@ -47,6 +53,7 @@ const IndexBase = () => {
   };
   //Creamos el controlador para la data los nodos
   const [nodosData, setNodosData] = useState(date);
+  const [envio, setEnvio] = useState(0);
   //const [datosTabla, setDatosTabla] = useState(date);
   //creamos un controlador para mostrar el contenido del form abajo del navbar
   const [navbarControlador, setNavbarControlador] = useState(0);
@@ -56,20 +63,42 @@ const IndexBase = () => {
   const [datos, setDatos] = useState([]);
   const [nodosTabla, setNodosTabla] = useState({});
 
-  const leerLS = () => {
-    let nodos = JSON.parse(localStorage.getItem("nodos"));
-    setDatos(nodos);
-    console.log(nodos);
-    return nodos;
-  };
+  
 
-  () => {
-    let ls = leerLS();
-    console.log(date[0]);
-  };
 
   useEffect(() => {
-    console.log(nodosData);
+    if (envio==1){
+      let nodos = JSON.parse(localStorage.getItem("nodos"));
+            let data = [];
+            for (let i = 0; i < nodos.length; i++) {
+              
+              data.push(
+                { "x":   nodos[i].posx  , "y":  nodos[i].posy }
+              );
+            }
+      let dt = {
+        labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
+        datasets: [
+          {
+            label: "Nodos",
+            /*  data: [33, 53, 85, 41, 44, 65], */
+            data: data,
+            responsive: true,
+            backgroundColor: "rgba(75,192,192,0.2)",
+            borderColor: "rgba(75,192,192,1)",
+            showLine: true,
+          },
+          /*   {
+                label: "Second dataset",
+                data: [33, 25, 35, 51, 54, 76],
+                fill: false,
+                borderColor: "#742774",
+              }, */
+        ],
+      };
+      setNodosData(dt);
+      setEnvio(0);
+    }
     leerLS();
   }, []);
   return (
@@ -104,6 +133,8 @@ const IndexBase = () => {
                     <AgregarNodo
                       datos={datos}
                       setDatos={setDatos}
+                      envio={envio}
+                      setEnvio={setEnvio}
                     ></AgregarNodo>
                   );
                 }
@@ -113,7 +144,7 @@ const IndexBase = () => {
           <div className="row bg-white mt-5  mx-0 my-0">
             <h1 className="text-center mt-3">RUTAS</h1>
             <div className="col-10 m-auto d-flex justify-content-center   pb-4">
-              <Scatter data={nodosData}></Scatter>
+              <Scatter data={nodosData} ></Scatter>
             </div>
           </div>
         </div>
