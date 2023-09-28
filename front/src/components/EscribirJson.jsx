@@ -3,15 +3,14 @@ import React, { useState, useEffect } from "react";
 const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
   const enviarJson = (e) => {
     e.preventDefault();
-    let json = e.target.data.value;
+    let jsonData = e.target.data.value;
+    console.log(jsonData);
     fetch("http://localhost:5000/api/crearRuta", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({
-        jsonData: json,
-      }),
+      body: jsonData,
     })
       .then((response) => {
         return response.json();
@@ -32,7 +31,7 @@ const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
 
   return (
     <>
-      <form action="" className="d-flex">
+      <form onSubmit={enviarJson} className="d-flex">
         <div className="col-md-10">
           <div className="row g-2">
             <div className="col-md-2 align-self-center">

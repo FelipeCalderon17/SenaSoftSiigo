@@ -62,8 +62,8 @@ function encontrarRutaMasEficiente(jsonData) {
 }
 
 //Verbo POST PARA CREAR LA RUTA
-ruta.post("/api/crearRuta", (req, res) => {
-  const jsonData = req.body;
+ruta.post("/api/crearRuta", async (req, res) => {
+  const jsonData = JSON.parse(req.body);
   const resultado = encontrarRutaMasEficiente(jsonData);
   let dataInsertar = {
     nodo_inicio: resultado.rutaMasEficiente[0].nombre,
@@ -99,6 +99,7 @@ ruta.post("/api/crearRuta", (req, res) => {
       return res.send({
         Ruta: resultado.rutaMasEficiente.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(" -> "),
         Nodos_sin_conexion: resultado.nodosSinConexion.map((nodo) => `${nodo.nombre} ((${nodo.posX}), (${nodo.posY}))`).join(", "),
+        resultado: true,
       });
     }
   });

@@ -32,7 +32,7 @@ usuario.post("/api/usuarios", (req, res) => {
   const code = uuidv4();
   const data = {
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 7),
+    password: req.body.password,
     codigo: code,
     verificado: false,
     sesion_activa: false,
@@ -85,7 +85,7 @@ usuario.post("/api/usuarioLogin", (req, res) => {
     if (error) {
       console.log("Error!2");
     } else {
-      if (bcrypt.hashSync(data.password) == respuesta[0].password && req.body.email == respuesta[0].email) {
+      if (data.password == respuesta[0].password && req.body.email == respuesta[0].email) {
         cnn.query("update usuario set sesion_activa=1"),
           (error, respuesta) => {
             if (error) {
@@ -93,7 +93,6 @@ usuario.post("/api/usuarioLogin", (req, res) => {
             }
           };
         res.send({
-          c: bcrypt.hashSync(data.password),
           resultado: "OK",
         });
       } else {
