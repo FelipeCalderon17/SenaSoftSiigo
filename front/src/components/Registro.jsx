@@ -6,39 +6,70 @@ const Registro = ({ controlador, setControlador }) => {
   console.log(controlador);
   const registrarse = (e) => {
     e.preventDefault();
-    console.log(e.target);
-    let email = e.target.emailRegistro.value;
-    let password = e.target.passRegistro.value;
-    console.log(email);
-    console.log(password);
-    fetch(urlApi, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-
-      .then((response) => {
-        if (response.status === "OK") {
-          Swal.fire("Felicitaciones!", "Usuario registrado satisfactoriamente", "success");
-          setTimeout(() => {
-            window.location = "index.html";
-          }, 1700);
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Error en la insercion",
-          });
-        }
+    if (e.target.emailRegistro.value.length == 0 || e.target.passRegistro.value.length < 8 || !e.target.emailRegistro.value.includes("@")) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Verifica tus datos, recuerda que tu contraseña debe tener como mínimo 8 caracteres y debes de proporcionar un correo valido",
       });
+    } else {
+      fetch("http://localhost:5000/api/buscarCorreo", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: e.target.emailRegistro.value,
+        }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.res.length > 0) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Tu correo ya esta registrado",
+            });
+          } else {
+            let email = e.target.emailRegistro.value;
+            let password = e.target.passRegistro.value;
+            fetch(urlApi, {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                email: email,
+                password: password,
+              }),
+            })
+              .then((response) => {
+                return response.json();
+              })
+              .then((response) => {
+                if (response.status === "OK") {
+                  Swal.fire(
+                    "Felicitaciones!",
+                    "Usuario registrado satisfactoriamente, te enviamos una verificacion a tu correo electronico",
+                    "success"
+                  );
+                  setTimeout(() => {
+                    window.location = "index.html";
+                  }, 3000);
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error en la insercion",
+                  });
+                }
+              });
+          }
+        });
+    }
   };
   return (
     <>

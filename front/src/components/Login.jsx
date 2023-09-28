@@ -6,34 +6,117 @@ import bg from "../assets/mp4/bg.mp4";
 const Login = ({ controlador, setControlador, LoginControlador, setLoginControlador }) => {
   const iniciarSesion = (e) => {
     e.preventDefault();
-    console.log(e.target);
-    let email = e.target.emailLogin.value;
-    let password = e.target.passLogin.value;
-    console.log(email);
-    console.log(password);
-    fetch("http://localhost:5000/api/usuarioLogin", {
+    fetch("http://localhost:5000/api/validarVerificacion", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        email: email,
-        password: password,
+        email: e.target.emailLogin.value,
       }),
     })
       .then((response) => {
         return response.json();
       })
-
       .then((response) => {
-        if (response.resultado === "OK") {
-          setLoginControlador(1);
-        } else {
+        console.log(response);
+        if (response.verificado === false) {
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Error en el login, por favor revisa tus datos",
+            text: "No has validado tu correo, por favor checkea tu inbox",
           });
+        } else {
+          fetch("http://localhost:5000/api/sesion", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              email: e.target.emailLogin.value,
+            }),
+          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((response) => {
+              if (response === true) {
+                Swal.fire({
+                  title: "Tiene otra sesión iniciada, ¿desea cerrarla?",
+                  text: "",
+                  icon: "question",
+                  showCancelButton: true,
+                  confirmButtonColor: "#d33",
+                  cancelButtonColor: "#3085d6",
+                  confirmButtonText: "Cerrar Sesión",
+                  cancelButtonText: "Cancelar",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    setLoginControlador(1);
+                    let email = e.target.emailLogin.value;
+                    let password = e.target.passLogin.value;
+                    console.log(email);
+                    console.log(password);
+                    fetch("http://localhost:5000/api/usuarioLogin", {
+                      method: "POST",
+                      headers: {
+                        "content-type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        email: email,
+                        password: password,
+                      }),
+                    })
+                      .then((response) => {
+                        return response.json();
+                      })
+                      .then((response) => {
+                        if (response.resultado === "OK") {
+                          setLoginControlador(1);
+                        } else {
+                          Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Error en el login, por favor revisa tus datos",
+                          });
+                          setTimeout(() => {
+                            window.location = "index.html";
+                          }, 3000);
+                        }
+                      });
+                  }
+                });
+              } else {
+                let email = e.target.emailLogin.value;
+                let password = e.target.passLogin.value;
+                console.log(email);
+                console.log(password);
+                fetch("http://localhost:5000/api/usuarioLogin", {
+                  method: "POST",
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    email: email,
+                    password: password,
+                  }),
+                })
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((response) => {
+                    if (response.resultado === "OK") {
+                      setLoginControlador(1);
+                    } else {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Error en el login, por favor revisa tus datos",
+                      });
+                    }
+                  });
+              }
+            });
         }
       });
   };

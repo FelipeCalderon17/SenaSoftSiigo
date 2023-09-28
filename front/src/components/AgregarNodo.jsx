@@ -44,34 +44,19 @@ const AgregarNodo = ({ datos, setDatos }) => {
 
   return (
     <>
-      <button
-        className="btn btn-dark sticky-top "
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasExample"
-        aria-controls="offcanvasExample"
-      >
+      <button className="btn btn-dark sticky-top " data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
         {" "}
         Agregar Destino
       </button>
       {
         //Inicio del offcanvas para agregar destino
       }
-      <div
-        className="offcanvas offcanvas-end"
-        tabindex="-1"
-        id="offcanvasExample"
-        aria-labelledby="offcanvasExampleLabel"
-      >
+      <div className="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasExampleLabel">
             AGREGAR DESTINO
           </h5>
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
+          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div className="offcanvas-body">
           <form onSubmit={getDatosFrm}>
@@ -80,70 +65,38 @@ const AgregarNodo = ({ datos, setDatos }) => {
                 <div className="col-12">
                   <button onClick={(e) => {}}>ds</button>
                   <h5>Nombre: </h5>
-                  <input
-                    type="text"
-                    placeholder="Ingrese el nombre del destino"
-                    name="nombreNodo"
-                    id="nombreNodo"
-                    className="form-control"
-                  />
+                  <input type="text" placeholder="Ingrese el nombre del destino" name="nombreNodo" id="nombreNodo" className="form-control" />
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col-12">
                   <h5>Posicion X: </h5>
-                  <input
-                    type="text"
-                    name="posx"
-                    id="posx"
-                    placeholder="Ingrese la posicion X del destino"
-                    className="form-control"
-                  />
+                  <input type="text" name="posx" id="posx" placeholder="Ingrese la posicion X del destino" className="form-control" />
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col-12">
                   <h5>Posicion Y: </h5>
-                  <input
-                    type="text"
-                    name="posy"
-                    id="posy"
-                    placeholder="Ingrese la posicion Y del destino"
-                    className="form-control"
-                  />
+                  <input type="text" name="posy" id="posy" placeholder="Ingrese la posicion Y del destino" className="form-control" />
                 </div>
               </div>
               <div className="row mb-3">
                 <div className="col-12">
                   <h5>Peso: </h5>
-                  <input
-                    type="text"
-                    name="pesoNodo"
-                    id="pesoNodo"
-                    placeholder="Ingrese el peso "
-                    className="form-control"
-                  />
+                  <input type="text" name="pesoNodo" id="pesoNodo" placeholder="Ingrese el peso " className="form-control" />
                 </div>
               </div>
               <div className="row mb-5">
                 <div className="col-12">
                   <h5>Conexion: </h5>
-                  <select
-                    className="form-select"
-                    name="conexionNodo"
-                    id="conexionNodo"
-                  >
+                  <select className="form-select" name="conexionNodo" id="conexionNodo">
                     <option value="">dsadas</option>
                   </select>
                 </div>
               </div>
               <div className="row ">
                 <div className="col-12 text-center">
-                  <input
-                    type="submit"
-                    className="btn btn-primary w-50"
-                    value={"Enviar"}
-                  />
+                  <input type="submit" className="btn btn-primary w-50" value={"Enviar"} />
                 </div>
               </div>
             </div>

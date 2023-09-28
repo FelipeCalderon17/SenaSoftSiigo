@@ -1,45 +1,69 @@
 import React, { useState, useEffect } from "react";
 
 const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
+  function isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
   const enviarJson = (e) => {
     e.preventDefault();
     let jsonData = e.target.data.value;
     jsonData = jsonData.trim();
-    jsonData = JSON.parse(e.target.data.value);
-    console.log(jsonData);
-    fetch("http://localhost:5000/api/crearRuta", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(jsonData),
-    })
-      .then((response) => {
-        return response.json();
+    if (isJson(jsonData)) {
+      jsonData = JSON.parse(e.target.data.value);
+      console.log(jsonData);
+      fetch("http://localhost:5000/api/crearRuta", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(jsonData),
       })
-
-      .then((response) => {
-        console.log(response.Ruta);
-        if (response.resultado == true) {
-          setNodosTabla(response.Ruta);
-          let array = response.Ruta.split("->");
-          /* console.log(posX[1]);
-          console.log(posY[1]); */
-          let ubicaciones = [];
-          for (let i = 0; i < array.length; i++) {
-            let posX = array[i].split("X");
-            let posY = array[i].split("Y");
-            ubicaciones.push(posX[1] + "|" + posY[1]);
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          if (response.resultado == true) {
+            setNodosTabla(response.Ruta);
+            let array = response.Ruta.split("->");
+            let ubicaciones = [];
+            for (let i = 0; i < array.length; i++) {
+              let posX = array[i].split("X");
+              let posY = array[i].split("Y");
+              ubicaciones.push(posX[1] + "|" + posY[1]);
+            }
+            let newArray = [];
+            let data = [];
+            for (let i = 0; i < ubicaciones.length; i++) {
+              newArray = ubicaciones[i].split("|");
+              data.push("{ x: " + newArray[0] + ", y:" + newArray[1] + " },");
+            }
+            console.log(newArray);
+            console.log(data);
+            let newData = [];
+            for (let i = 0; i < data.length; i++) {
+              newData.push(data[i].replace('"', ""));
+            }
+            console.log(newData[2]);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Error en la insercion",
+            });
           }
-          console.log(ubicaciones);
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Error en la insercion",
-          });
-        }
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "El JSON proporcionado no es valido",
       });
+    }
   };
 
   return (

@@ -17,12 +17,7 @@ function App() {
           return <IndexBase></IndexBase>;
         } else {
           if (controlador == 1) {
-            return (
-              <Registro
-                controlador={controlador}
-                setControlador={setControlador}
-              ></Registro>
-            );
+            return <Registro controlador={controlador} setControlador={setControlador}></Registro>;
           } else {
             return (
               <Login

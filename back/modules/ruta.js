@@ -37,7 +37,11 @@ function encontrarRutaMasEficiente(jsonData) {
     visitados.add(nodoActual);
     const ubicacion = ubicaciones.find((ubicacion) => ubicacion.nombre === nodoActual);
     if (ubicacion) {
-      rutaActual.push({ nombre: nodoActual, posX: ubicacion.posX, posY: ubicacion.posY });
+      rutaActual.push({
+        nombre: nodoActual,
+        posX: ubicacion.posX,
+        posY: ubicacion.posY,
+      });
     }
 
     // Buscar el nodo no visitado más cercano
@@ -53,7 +57,11 @@ function encontrarRutaMasEficiente(jsonData) {
   // Encontrar nodos sin conexión
   const nodosSinConexion = ubicaciones
     .filter((ubicacion) => ubicacion.nombre !== inicio && !nodosConectados.has(ubicacion.nombre))
-    .map((ubicacion) => ({ nombre: ubicacion.nombre, posX: ubicacion.posX, posY: ubicacion.posY }));
+    .map((ubicacion) => ({
+      nombre: ubicacion.nombre,
+      posX: ubicacion.posX,
+      posY: ubicacion.posY,
+    }));
 
   return {
     rutaMasEficiente: rutaActual,
@@ -65,7 +73,10 @@ function encontrarRutaMasEficiente(jsonData) {
 ruta.post("/api/crearRuta", async (req, res) => {
   const jsonData = req.body;
   if (!jsonData || !jsonData.ubicaciones || !jsonData.conexiones || !jsonData.inicio) {
-    return res.status(400).json({ resultado: false, error: "Datos JSON incompletos o incorrectos" });
+    return res.status(400).json({
+      resultado: false,
+      error: "Datos JSON incompletos o incorrectos",
+    });
   } else {
     const resultado = encontrarRutaMasEficiente(jsonData);
     let dataInsertar = {
