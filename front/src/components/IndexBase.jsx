@@ -12,12 +12,19 @@ import AgregarNodo from "./AgregarNodo";
 
 //importacion de la libreria chart.js
 
-import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Scatter } from "react-chartjs-2";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-const data = {
+let date = {
   labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
   datasets: [
     {
@@ -25,9 +32,9 @@ const data = {
       /*  data: [33, 53, 85, 41, 44, 65], */
       data: [
         { x: 4, y: 62 },
-        { x: 8, y: 6 },
+        /*{ x: 8, y: 6 },
         { x: 13, y: 46 },
-        { x: 17, y: 2 },
+        { x: 17, y: 2 }, */
       ],
       responsive: true,
       backgroundColor: "rgba(75,192,192,0.2)",
@@ -55,15 +62,30 @@ const IndexBase = () => {
   const leerLS = () => {
     let nodos = JSON.parse(localStorage.getItem("nodos"));
     setDatos(nodos);
+    console.log(nodos);
     return nodos;
   };
 
-  useEffect(() => {}, []);
+  () => {
+    let ls = leerLS();
+    console.log(date[0]);
+  };
+
+  useEffect(() => {
+    leerLS();
+  }, []);
   return (
     <>
       <div classNameName="container-fluid bg-white p-0">
-        <Navbar navbarControlador={navbarControlador} setNavbarControlador={setNavbarControlador}></Navbar>
-        <div className="container-fluid bg-primary sticky-top" data-wow-delay="0.1s" style={{ padding: "35px" }}>
+        <Navbar
+          navbarControlador={navbarControlador}
+          setNavbarControlador={setNavbarControlador}
+        ></Navbar>
+        <div
+          className="container-fluid bg-primary sticky-top"
+          data-wow-delay="0.1s"
+          style={{ padding: "35px" }}
+        >
           <div className="container">
             {(() => {
               //Desicion para controlar el contenido del div de interacciones
@@ -71,9 +93,19 @@ const IndexBase = () => {
                 return <SubirJson></SubirJson>;
               } else {
                 if (navbarControlador == 2) {
-                  return <EscribirJson nodosTabla={nodosTabla} setNodosTabla={setNodosTabla}></EscribirJson>;
+                  return (
+                    <EscribirJson
+                      nodosTabla={nodosTabla}
+                      setNodosTabla={setNodosTabla}
+                    ></EscribirJson>
+                  );
                 } else {
-                  return <AgregarNodo datos={datos} setDatos={setDatos}></AgregarNodo>;
+                  return (
+                    <AgregarNodo
+                      datos={datos}
+                      setDatos={setDatos}
+                    ></AgregarNodo>
+                  );
                 }
               }
             })()}
@@ -89,7 +121,7 @@ const IndexBase = () => {
             </button>
             <h1 className="text-center mt-3">RUTAS</h1>
             <div className="col-10 m-auto d-flex justify-content-center   pb-4">
-              <Scatter data={data}></Scatter>
+              <Scatter data={date}></Scatter>
             </div>
           </div>
         </div>
