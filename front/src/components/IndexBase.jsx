@@ -12,38 +12,42 @@ import AgregarNodo from "./AgregarNodo";
 
 //importacion de la libreria chart.js
 
-import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Scatter } from "react-chartjs-2";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-let date = {
-  labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
-  datasets: [
-    {
-      label: "Nodos",
-      /*  data: [33, 53, 85, 41, 44, 65], */
-      /* data: [
-        { x: 4, y: 62 }, */
-      /*{ x: 8, y: 6 },
-        { x: 13, y: 46 },
-        { x: 17, y: 2 }, */
-      /* ], */
-      responsive: true,
-      backgroundColor: "rgba(75,192,192,0.2)",
-      borderColor: "rgba(75,192,192,1)",
-      showLine: true,
-    },
-    /*   {
-          label: "Second dataset",
-          data: [33, 25, 35, 51, 54, 76],
-          fill: false,
-          borderColor: "#742774",
-        }, */
-  ],
-};
-
 const IndexBase = () => {
+  let date = {
+    labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
+    datasets: [
+      {
+        label: "Nodos",
+        /*  data: [33, 53, 85, 41, 44, 65], */
+        data: "",
+        responsive: true,
+        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "rgba(75,192,192,1)",
+        showLine: true,
+      },
+      /*   {
+            label: "Second dataset",
+            data: [33, 25, 35, 51, 54, 76],
+            fill: false,
+            borderColor: "#742774",
+          }, */
+    ],
+  };
+  //Creamos el controlador para la data los nodos
+  const [nodosData, setNodosData] = useState(date);
+  //const [datosTabla, setDatosTabla] = useState(date);
   //creamos un controlador para mostrar el contenido del form abajo del navbar
   const [navbarControlador, setNavbarControlador] = useState(0);
   //0 = Agregar Destino  1 = Subir archivo  2 = Escribir archivo
@@ -65,13 +69,21 @@ const IndexBase = () => {
   };
 
   useEffect(() => {
+    console.log(nodosData);
     leerLS();
   }, []);
   return (
     <>
       <div classNameName="container-fluid bg-white p-0">
-        <Navbar navbarControlador={navbarControlador} setNavbarControlador={setNavbarControlador}></Navbar>
-        <div className="container-fluid bg-primary sticky-top" data-wow-delay="0.1s" style={{ padding: "35px" }}>
+        <Navbar
+          navbarControlador={navbarControlador}
+          setNavbarControlador={setNavbarControlador}
+        ></Navbar>
+        <div
+          className="container-fluid bg-primary sticky-top"
+          data-wow-delay="0.1s"
+          style={{ padding: "35px" }}
+        >
           <div className="container">
             {(() => {
               //Desicion para controlar el contenido del div de interacciones
@@ -79,9 +91,21 @@ const IndexBase = () => {
                 return <SubirJson></SubirJson>;
               } else {
                 if (navbarControlador == 2) {
-                  return <EscribirJson nodosTabla={nodosTabla} setNodosTabla={setNodosTabla}></EscribirJson>;
+                  return (
+                    <EscribirJson
+                      nodosTabla={nodosTabla}
+                      setNodosTabla={setNodosTabla}
+                      nodosData={nodosData}
+                      setNodosData={setNodosData}
+                    ></EscribirJson>
+                  );
                 } else {
-                  return <AgregarNodo datos={datos} setDatos={setDatos}></AgregarNodo>;
+                  return (
+                    <AgregarNodo
+                      datos={datos}
+                      setDatos={setDatos}
+                    ></AgregarNodo>
+                  );
                 }
               }
             })()}
@@ -89,7 +113,7 @@ const IndexBase = () => {
           <div className="row bg-white mt-5  mx-0 my-0">
             <button
               onClick={() => {
-                console.log(nodosTabla);
+                console.log(nodosData);
               }}
             >
               {" "}
@@ -97,7 +121,7 @@ const IndexBase = () => {
             </button>
             <h1 className="text-center mt-3">RUTAS</h1>
             <div className="col-10 m-auto d-flex justify-content-center   pb-4">
-              <Scatter data={date}></Scatter>
+              <Scatter data={nodosData}></Scatter>
             </div>
           </div>
         </div>

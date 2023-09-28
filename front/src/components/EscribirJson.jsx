@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
+const EscribirJson = ({
+  nodosTabla,
+  setNodosTabla,
+  nodosData,
+  setNodosData,
+}) => {
   function isJson(str) {
     try {
       JSON.parse(str);
@@ -46,9 +51,32 @@ const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
             console.log(data);
             let newData = [];
             for (let i = 0; i < data.length; i++) {
-              newData.push(data[i].replace('"', ""));
+              newData.push(data[i].replace("'", ""));
             }
             console.log(newData[2]);
+            let aa = JSON.parse(newData[2]);
+            console.log(typeof aa);
+            let date = {
+              labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
+              datasets: [
+                {
+                  label: "Nodos",
+                  /*  data: [33, 53, 85, 41, 44, 65], */
+                  data: JSON.parse(newData),
+                  responsive: true,
+                  backgroundColor: "rgba(75,192,192,0.2)",
+                  borderColor: "rgba(75,192,192,1)",
+                  showLine: true,
+                },
+                /*   {
+                      label: "Second dataset",
+                      data: [33, 25, 35, 51, 54, 76],
+                      fill: false,
+                      borderColor: "#742774",
+                    }, */
+              ],
+            };
+            setNodosData(date);
           } else {
             Swal.fire({
               icon: "error",
