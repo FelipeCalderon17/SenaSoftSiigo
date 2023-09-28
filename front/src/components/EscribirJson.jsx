@@ -4,21 +4,34 @@ const EscribirJson = ({ nodosTabla, setNodosTabla }) => {
   const enviarJson = (e) => {
     e.preventDefault();
     let jsonData = e.target.data.value;
+    jsonData = jsonData.trim();
+    jsonData = JSON.parse(e.target.data.value);
     console.log(jsonData);
     fetch("http://localhost:5000/api/crearRuta", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: jsonData,
+      body: JSON.stringify(jsonData),
     })
       .then((response) => {
         return response.json();
       })
 
       .then((response) => {
+        console.log(response.Ruta);
         if (response.resultado == true) {
           setNodosTabla(response.Ruta);
+          let array = response.Ruta.split("->");
+          /* console.log(posX[1]);
+          console.log(posY[1]); */
+          let ubicaciones = [];
+          for (let i = 0; i < array.length; i++) {
+            let posX = array[i].split("X");
+            let posY = array[i].split("Y");
+            ubicaciones.push(posX[1] + "|" + posY[1]);
+          }
+          console.log(ubicaciones);
         } else {
           Swal.fire({
             icon: "error",
