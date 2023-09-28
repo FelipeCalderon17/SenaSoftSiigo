@@ -45,24 +45,21 @@ const EscribirJson = ({
             let data = [];
             for (let i = 0; i < ubicaciones.length; i++) {
               newArray = ubicaciones[i].split("|");
-              data.push("{ x: " + newArray[0] + ", y:" + newArray[1] + " },");
+              data.push(
+                { "x":   newArray[0]  , "y":  newArray[1] }
+              );
             }
-            console.log(newArray);
+            
             console.log(data);
-            let newData = [];
-            for (let i = 0; i < data.length; i++) {
-              newData.push(data[i].replace("'", ""));
-            }
-            console.log(newData[2]);
-            let aa = JSON.parse(newData[2]);
-            console.log(typeof aa);
+            console.log(typeof data);
+            
             let date = {
               labels: ["Punto A", "Punto B", "Punto C", "Punto D"],
               datasets: [
                 {
                   label: "Nodos",
                   /*  data: [33, 53, 85, 41, 44, 65], */
-                  data: JSON.parse(newData),
+                  data: data,
                   responsive: true,
                   backgroundColor: "rgba(75,192,192,0.2)",
                   borderColor: "rgba(75,192,192,1)",

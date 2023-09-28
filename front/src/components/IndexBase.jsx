@@ -111,14 +111,6 @@ const IndexBase = () => {
             })()}
           </div>
           <div className="row bg-white mt-5  mx-0 my-0">
-            <button
-              onClick={() => {
-                console.log(nodosData);
-              }}
-            >
-              {" "}
-              dsds
-            </button>
             <h1 className="text-center mt-3">RUTAS</h1>
             <div className="col-10 m-auto d-flex justify-content-center   pb-4">
               <Scatter data={nodosData}></Scatter>
